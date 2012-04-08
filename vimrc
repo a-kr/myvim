@@ -21,7 +21,7 @@ Bundle 'L9'
 " non github repos
 Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
-Bundle 'ScrollColors'
+Bundle 'Conque-Shell'
 " ...
 
 filetype plugin indent on     " required! 
