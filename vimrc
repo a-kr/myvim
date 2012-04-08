@@ -77,6 +77,9 @@ nmap <C-d> <Esc>yypi
 nmap <leader>q :q<CR>
 nmap <leader>n :NERDTreeToggle %:p:h<CR>
 nmap <F10> <Esc>:set wrap!<CR>
+nmap <leader>bt :ConqueTermTab bash<CR>
+nmap <leader>bs :ConqueTermSplit bash<CR>
+nmap <leader>bv :ConqueTermVSplit bash<CR>
 
 set ignorecase
 set smartcase
