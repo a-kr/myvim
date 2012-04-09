@@ -39,7 +39,7 @@ set encoding=utf-8
 set number
 set t_Co=256
 let python_highlight_all = 1
-"set statusline=%<%f\ [%Y%R%W]%1*%{(&modified)?'\ +\ ':''}%*\ encoding\:\ %{&fileencoding}%=%c%V,%l\ %P\ [%n]
+set statusline=%<%f\ [%Y%R%W]%1*%{(&modified)?'\ +\ ':''}%*\ encoding\:\ %{&fileencoding}%=%c%V,%l\ %P\ [%n]
 
 set expandtab
 set tabstop=4
@@ -63,6 +63,9 @@ nmap <leader>ve :tabnew ~/.vimrc<CR>
 nmap <leader>vr :w<CR>:source ~/.vimrc<CR>
 
 imap jj <Esc>
+cnoreabbrev nt tabnew
+cnoreabbrev tn tabnew
+
 
 map <C-l> <C-W><Right>
 map <C-h> <C-W><Left>
@@ -74,6 +77,7 @@ map <C-S> <Esc>:w<CR>
 nmap ; :
 imap <S-Tab> <Esc><<i
 nmap <S-Tab> <<
+nmap <Tab> >>
 nnoremap - <S-$>
 nnoremap 0 <S-^>
 nnoremap 9 <Home>
@@ -136,8 +140,8 @@ function! AutoHighlightToggle()
     endif
 endfunction
 
-nnoremap <C-I> :call feedkeys( line('.')==1 ? '' : 'ddkP' )<CR>
-nnoremap <C-U> ddp
+"nnoremap <C-i> :call feedkeys( line('.')==1 ? '' : 'ddkP' )<CR>
+"nnoremap <C-u> ddp
 
 function! MouseAndNumbersToggle()
     if &mouse == ""
