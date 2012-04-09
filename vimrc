@@ -21,6 +21,7 @@ Bundle 'L9'
 " non github repos
 Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
+"Bundle 'scrooloose/nerdcommenter'
 Bundle 'Conque-Shell'
 " ...
 
@@ -38,6 +39,7 @@ set encoding=utf-8
 set number
 set t_Co=256
 let python_highlight_all = 1
+"set statusline=%<%f\ [%Y%R%W]%1*%{(&modified)?'\ +\ ':''}%*\ encoding\:\ %{&fileencoding}%=%c%V,%l\ %P\ [%n]
 
 set expandtab
 set tabstop=4
@@ -64,19 +66,23 @@ imap jj <Esc>
 
 map <C-l> <C-W><Right>
 map <C-h> <C-W><Left>
-map <C-i> <C-W><Up>
-map <C-u> <C-W><Down>
+map <C-k> <C-W><Up>
+map <C-j> <C-W><Down>
 
 map <C-S> <Esc>:w<CR>
 
 nmap ; :
 imap <S-Tab> <Esc><<i
 nmap <S-Tab> <<
+nnoremap - <S-$>
+nnoremap 0 <S-^>
+nnoremap 9 <Home>
 
 nmap <C-d> <Esc>yypi
 nmap <leader>q :q<CR>
 nmap <leader>n :NERDTreeToggle %:p:h<CR>
 nmap <F10> <Esc>:set wrap!<CR>
+nmap <F11> <Esc>:set number!<CR>
 nmap <leader>bt :ConqueTermTab bash<CR>
 nmap <leader>bs :ConqueTermSplit bash<CR>
 nmap <leader>bv :ConqueTermVSplit bash<CR>
@@ -130,8 +136,22 @@ function! AutoHighlightToggle()
     endif
 endfunction
 
-nmap <C-K> :call feedkeys( line('.')==1 ? '' : 'ddkP' )<CR>
-nmap <C-J> ddp
+nnoremap <C-I> :call feedkeys( line('.')==1 ? '' : 'ddkP' )<CR>
+nnoremap <C-U> ddp
+
+function! MouseAndNumbersToggle()
+    if &mouse == ""
+        let &mouse = "a"
+        set number
+        echo "mouse enabled"
+    else
+        let &mouse = ""
+        set nonumber
+        echo "mouse disabled"
+    endif
+endfunction
+
+nnoremap <F12> :call MouseAndNumbersToggle()<CR>
 
 set nocursorline
 
