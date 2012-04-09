@@ -64,6 +64,9 @@ nmap <leader>vr :w<CR>:source ~/.vimrc<CR>
 
 imap jj <Esc>
 
+cnoreabbrev nt tabnew
+cnoreabbrev tn tabnew
+
 map <C-l> <C-W><Right>
 map <C-h> <C-W><Left>
 map <C-k> <C-W><Up>
