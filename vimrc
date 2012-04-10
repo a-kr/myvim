@@ -14,6 +14,7 @@ Bundle 'gmarik/vundle'
 "
 " original repos on github
 Bundle 'tpope/vim-fugitive'
+Bundle 'kana/vim-submode'
 "_Bundle 'Lokaltog/vim-easymotion'
 " vim-scripts repos
 Bundle 'FuzzyFinder'
@@ -23,7 +24,13 @@ Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
 "Bundle 'scrooloose/nerdcommenter'
 Bundle 'Conque-Shell'
+Bundle 'taglist.vim'
 " ...
+let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
+
+let Tlist_Ctags_Cmd = "c:\bin\ctags.exe"
+let Tlist_WinWidth = 50
+map <F4> :TlistToggle<cr>
 
 filetype plugin indent on     " required! 
 "
@@ -63,9 +70,13 @@ nmap <leader>ve :tabnew ~/.vimrc<CR>
 nmap <leader>vr :w<CR>:source ~/.vimrc<CR>
 
 imap jj <Esc>
+imap jk <Esc>
 cnoreabbrev nt tabnew
 cnoreabbrev tn tabnew
+imap <C-l> <C-Right>
+imap <C-h> <C-Left>
 
+nmap df dd
 
 map <C-l> <C-W><Right>
 map <C-h> <C-W><Left>
@@ -73,6 +84,8 @@ map <C-k> <C-W><Up>
 map <C-j> <C-W><Down>
 
 map <C-S> <Esc>:w<CR>
+nmap <leader>s <Esc>:w<CR>
+nmap <leader>w <Esc>:w<CR>
 
 nmap ; :
 imap <S-Tab> <Esc><<i
@@ -82,7 +95,7 @@ nnoremap - <S-$>
 nnoremap 0 <S-^>
 nnoremap 9 <Home>
 
-nmap <C-d> <Esc>yypi
+nmap <C-d> <Esc>yyp
 nmap <leader>q :q<CR>
 nmap <leader>n :NERDTreeToggle %:p:h<CR>
 nmap <F10> <Esc>:set wrap!<CR>
@@ -160,20 +173,26 @@ nnoremap <F12> :call MouseAndNumbersToggle()<CR>
 set nocursorline
 
 " Autocomplete on Tab ===================================
+function! Tab_Or_Complete()
+  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+    return "\<C-N>"
+  else
+    return "\<Tab>"
+  endif
+endfunction
+inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
 
-"function InsertTabWrapper()
-"    let col = col('.') - 1
-"    if !col || getline('.')[col - 1] !~ '\k'
-"        return "\"
-"    else
-"        return "\<c-p>"
-"    endif
-"endfunction
 
-imap  <c-r> InsertTabWrapper() 
 set complete=""
 set complete+=.
 set complete+=k
 set complete+=b
 set complete+=t
+
+let g:submode_timeout=0
+let g:submode_timeoutlen=60000
+call submode#enter_with('fastdel', 'n', '', 'df', 'dd')
+call submode#leave_with('fastdel', 'n', '', '<Esc>')
+call submode#map('fastdel', 'n', '', 'f', 'dd')
+call submode#map('fastdel', 'n', '', 'd', 'dd')
 
