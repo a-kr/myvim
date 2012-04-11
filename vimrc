@@ -47,6 +47,7 @@ set number
 set t_Co=256
 let python_highlight_all = 1
 set statusline=%<%f\ [%Y%R%W]%1*%{(&modified)?'\ +\ ':''}%*\ encoding\:\ %{&fileencoding}%=%c%V,%l\ %P\ [%n]
+set laststatus=2
 
 set expandtab
 set tabstop=4
@@ -77,6 +78,7 @@ imap <C-l> <C-Right>
 imap <C-h> <C-Left>
 
 nmap df dd
+nmap gr gT
 
 cnoreabbrev nt tabnew
 cnoreabbrev tn tabnew
