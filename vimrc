@@ -71,7 +71,8 @@ nmap <leader>ve :tabnew ~/.vimrc<CR>
 nmap <leader>vr :w<CR>:source ~/.vimrc<CR>
 
 imap jj <Esc>
-imap jk <Esc>
+imap jk <Esc>:w<CR>
+
 cnoreabbrev nt tabnew
 cnoreabbrev tn tabnew
 imap <C-l> <C-Right>
