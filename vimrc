@@ -22,15 +22,18 @@ Bundle 'L9'
 " non github repos
 Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
-"Bundle 'scrooloose/nerdcommenter'
+Bundle 'scrooloose/nerdcommenter'
 Bundle 'Conque-Shell'
 Bundle 'taglist.vim'
+Bundle 'compview'
 " ...
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
 
 let Tlist_Ctags_Cmd = "c:\bin\ctags.exe"
 let Tlist_WinWidth = 50
 map <F4> :TlistToggle<cr>
+
+map <leader>f <Plug>CompView
 
 filetype plugin indent on     " required! 
 "
