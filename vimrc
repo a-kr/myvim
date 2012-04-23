@@ -84,6 +84,10 @@ imap <C-h> <C-Left>
 nmap df dd
 nmap gr gT
 
+
+nnoremap z @
+nnoremap zz @@
+
 cnoreabbrev nt tabnew
 cnoreabbrev tn tabnew
 
