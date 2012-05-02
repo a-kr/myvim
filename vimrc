@@ -81,7 +81,7 @@ cnoreabbrev tn tabnew
 imap <C-l> <C-Right>
 imap <C-h> <C-Left>
 
-nmap df dd
+"nmap df dd
 nmap gr gT
 
 
@@ -166,6 +166,8 @@ function! AutoHighlightToggle()
     endif
 endfunction
 
+nnoremap <C-f> :set hlsearch<CR>*#
+
 "nnoremap <C-i> :call feedkeys( line('.')==1 ? '' : 'ddkP' )<CR>
 "nnoremap <C-u> ddp
 
@@ -204,8 +206,8 @@ set complete+=t
 
 let g:submode_timeout=0
 let g:submode_timeoutlen=60000
-call submode#enter_with('fastdel', 'n', '', 'df', 'dd')
-call submode#leave_with('fastdel', 'n', '', '<Esc>')
-call submode#map('fastdel', 'n', '', 'f', 'dd')
-call submode#map('fastdel', 'n', '', 'd', 'dd')
+"call submode#enter_with('fastdel', 'n', '', 'df', 'dd')
+"call submode#leave_with('fastdel', 'n', '', '<Esc>')
+"call submode#map('fastdel', 'n', '', 'f', 'dd')
+"call submode#map('fastdel', 'n', '', 'd', 'dd')
 
