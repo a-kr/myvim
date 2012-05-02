@@ -81,7 +81,6 @@ cnoreabbrev tn tabnew
 imap <C-l> <C-Right>
 imap <C-h> <C-Left>
 
-"nmap df dd
 nmap gr gT
 
 
@@ -99,6 +98,8 @@ map <C-j> <C-W><Down>
 map <C-S> <Esc>:w<CR>
 nmap <leader>s <Esc>:w<CR>
 nmap <leader>w <Esc>:w<CR>
+
+nmap <C-f> :set hlsearch<CR>*#
 
 nmap ; :
 imap <S-Tab> <Esc><<i
@@ -166,7 +167,6 @@ function! AutoHighlightToggle()
     endif
 endfunction
 
-nnoremap <C-f> :set hlsearch<CR>*#
 
 "nnoremap <C-i> :call feedkeys( line('.')==1 ? '' : 'ddkP' )<CR>
 "nnoremap <C-u> ddp
@@ -196,6 +196,13 @@ function! Tab_Or_Complete()
   endif
 endfunction
 inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
+"
+"This allows for change paste motion cp{motion}
+nmap <silent> cp :set opfunc=ChangePaste<CR>g@
+function! ChangePaste(type, ...)
+    silent exe "normal! `[v`]\"_c"
+    silent exe "normal! p"
+endfunction
 
 
 set complete=""
