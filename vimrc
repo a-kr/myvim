@@ -408,3 +408,21 @@ map Ь M
 map Б <
 map Ю >
 map Ё ~
+lnoremap jk ол
+lnoremap as <Esc>:w<CR>
+lnoremap ;' <Esc>:w<CR>
+"inoremap <C-[> 
+"inoremap <C-]> 
+inoremap <C-\> 
+
+" insert latex command
+nmap <leader>l :set opfunc=InsertLatex<CR>g@
+function! InsertLatex(type, ...)
+    silent exe "normal! `[mu`]mi"
+    silent exe "normal! `ui\\{"
+    silent exe "normal! `ila}"
+    silent exe "normal `ul"
+    silent exe "startinsert"
+endfunction
+
+
