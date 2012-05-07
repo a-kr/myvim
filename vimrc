@@ -30,10 +30,7 @@ Bundle 'compview'
 " ...
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
 
-let Tlist_Ctags_Cmd = "c:\bin\ctags.exe"
-let Tlist_WinWidth = 50
-map <F4> :TlistToggle<cr>
-
+" \f - поиск с выводом списка вариантов, с перемещением по нему
 map <leader>f <Plug>CompView
 
 filetype plugin indent on     " required! 
@@ -51,82 +48,118 @@ set number
 set t_Co=256
 let python_highlight_all = 1
 set statusline=%<%f\ [%Y%R%W]%1*%{(&modified)?'\ +\ ':''}%*\ encoding\:\ %{&fileencoding}%=%c%V,%l\ %P\ [%n]
+" статус-бар всегда виден:
 set laststatus=2
+" строка ярлычков вкладок всегда видна:
+set showtabline=2
 
 set expandtab
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set autoindent
+" скроллить буфер, когда курсор подходит к верху/низу окна на scrolloff строк
 set scrolloff=3
 syntax on
 "color torte
 "color zenburn
 color wombat256
+" режим вставки из буфера ОС, не портящий отступы
 set pastetoggle=<F2>
-set showtabline=2
+
+" что-то касающееся элементов управления GVim
 set guioptions=em
 
+" автообновление измененных на диске файлов
 set autoread
+" редактор реагирует на мышь
 set mouse=a
-set wildignore=*.pyc
+set wildignore=*.pyc,*.aux
 
+" командой find можно искать и открывать файл в подкаталогах
 set path=.,,**
 
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
+" редактирование и перезагрузка vimrc
 nmap <leader>ve :tabnew ~/.vimrc<CR>
 nmap <leader>vr :w<CR>:source ~/.vimrc<CR>
 
-imap jj <Esc>
+" быстрый выход из режима вставки (не надо тянуться к Esc)
+" заодно повесим на это действие сохранение
 imap jk <Esc>:w<CR>
 
+" сокращения для открытия новой вкладки
 cnoreabbrev nt tabnew
 cnoreabbrev tn tabnew
+
+" перемещение по словам в режиме вставки
 imap <C-l> <C-Right>
 imap <C-h> <C-Left>
 
+" чуть более удобный переход к предыдущей вкладке
+" (к следующей - gt)
 nmap gr gT
 
+" создаем шаблон для замены из слова под курсором
 nmap <C-s> :%s/\<<c-r>=expand("<cword>")<cr>\>//g<left><left>
 
+" более удобная кнопка запуска макросов, раскорячиваться для Shitf-2 ужасно
+" (убивает какую-то не пригодившуюся мне функциональность кнопки z)
 nnoremap z @
 nnoremap zz @@
 
-cnoreabbrev nt tabnew
-cnoreabbrev tn tabnew
-
+" быстрая версия команд перемещения между сплитами
 map <C-l> <C-W><Right>
 map <C-h> <C-W><Left>
 map <C-k> <C-W><Up>
 map <C-j> <C-W><Down>
 
+" \s делает source текущего файла
 nmap <leader>s <Esc>:source %<CR>
+" \w сохраняет текущий файл
 nmap <leader>w <Esc>:w<CR>
 
+" подсвечивает все вхождения слова под курсором
 nmap <C-f> :set hlsearch<CR>*#
 
+" не надо зажимать Shift, чтобы перейти в командную строку
 nmap ; :
+
+" изменение отступов строк как в казуальных редакторах
 imap <S-Tab> <Esc><<i
 nmap <S-Tab> <<
 nmap <Tab> >>
-nnoremap - <S-$>
-nnoremap 0 <S-^>
-nnoremap 9 <Home>
 
+" перемещение в начало и конец строки одной клавишей
+nnoremap 0 <S-$>
+nnoremap 9 <S-^>
+
+" дублирование строки
 nmap <C-d> <Esc>yyp
+" закрытие окна
 nmap <leader>q :q<CR>
+" открытие файлового браузера
 nmap <leader>n :NERDTreeToggle %:p:h<CR>
+
+" переключение автопереносов строк
 nmap <F10> <Esc>:set wrap!<CR>
+" переключение нумерации
 nmap <F11> <Esc>:set number!<CR>
+
+" открытие терминала
 nmap <leader>bt :ConqueTermTab bash<CR>
 nmap <leader>bs :ConqueTermSplit bash<CR>
 nmap <leader>bv :ConqueTermVSplit bash<CR>
 
+" поиск не учитывает регистр...
 set ignorecase
+" ...если только в поисковом паттерне нет букв в верхнем регистре
 set smartcase
+" поиск по мере ввода
 set incsearch
 
+" дифф с версией файла на диске
 function! s:DiffWithSaved()
   let filetype=&ft
   diffthis
@@ -137,6 +170,7 @@ endfunction
 com! Diff call s:DiffWithSaved()     
 nmap <leader>df :Diff<CR>
 
+" дифф с версией в Git
 function! s:DiffWithGITCheckedOut()
   let filetype=&ft
   diffthis
@@ -172,10 +206,13 @@ function! AutoHighlightToggle()
     endif
 endfunction
 
-
-"nnoremap <C-i> :call feedkeys( line('.')==1 ? '' : 'ddkP' )<CR>
-"nnoremap <C-u> ddp
-
+" кнопка для переключения мышиного режима
+" (два состояния:
+"    - в одном включены номера строк, и Vim понимает мышиное выделение,
+"      но не дает копировать текст в буфер ОС через выделение эмулятора
+"      терминала,
+"    - в другом Vim не обрабатывает мышь, и можно копировать через эмулятор
+"      терминала (при этом номера строк отключаются и не мешаются)
 function! MouseAndNumbersToggle()
     if &mouse == ""
         let &mouse = "a"
@@ -190,6 +227,7 @@ endfunction
 
 nnoremap <F12> :call MouseAndNumbersToggle()<CR>
 
+" выделение строки, на которой находится курсор, не нужно 
 set nocursorline
 
 " Autocomplete on Tab ===================================
@@ -201,7 +239,13 @@ function! Tab_Or_Complete()
   endif
 endfunction
 inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
-"
+set complete=""
+set complete+=.
+set complete+=k
+set complete+=b
+set complete+=t
+
+" шикарная фича: вставка с заменой текстового объекта
 "This allows for change paste motion cp{motion}
 nmap <silent> cp :set opfunc=ChangePaste<CR>g@
 function! ChangePaste(type, ...)
@@ -210,11 +254,6 @@ function! ChangePaste(type, ...)
 endfunction
 
 
-set complete=""
-set complete+=.
-set complete+=k
-set complete+=b
-set complete+=t
 
 " переключение раскладки по Ctrl-6
 set keymap=russian-jcukenwin
@@ -304,68 +343,68 @@ nmap <leader>y :call Pythonize()<CR>
 " конец питоновских фишек ==================================================
 
 " Key mapping for Russian QWERTY keyboard in UTF-8
-"map й q
-"map ц w
-"map у e
-"map к r
-"map е t
-"map н y
-"map г u
-"map ш i
-"map щ o
-"map з p
-"map х [
-"map ъ ]
-"map ф a
-"map ы s
-"map в d
-"map а f
-"map п g
-"map р h
-"map о j
-"map л k
-"map д l
-"map ж ;
-"map э '
-"map я z
-"map ч x
-"map с c
-"map м v
-"map и b
-"map т n
-"map ь m
-"map б ,
-"map ю .
-"map Й Q
-"map Ц W
-"map У E
-"map К R
-"map Е T
-"map Н Y
-"map Г U
-"map Ш I
-"map Щ O
-"map З P
-"map Х }
-"map Ъ {
-"map Ф A
-"map Ы S
-"map В D
-"map А F
-"map П G
-"map Р H
-"map О J
-"map Л K
-"map Д L
-"map Ж :
-"map Э "
-"map Я Z
-"map Ч X
-"map С C
-"map М V
-"map И B
-"map Т N
-"map Ь M
-"map Б <
-"map Ю >
-"map Ё ~
+map й q
+map ц w
+map у e
+map к r
+map е t
+map н y
+map г u
+map ш i
+map щ o
+map з p
+map х [
+map ъ ]
+map ф a
+map ы s
+map в d
+map а f
+map п g
+map р h
+map о j
+map л k
+map д l
+map ж ;
+map э '
+map я z
+map ч x
+map с c
+map м v
+map и b
+map т n
+map ь m
+map б ,
+map ю .
+map Й Q
+map Ц W
+map У E
+map К R
+map Е T
+map Н Y
+map Г U
+map Ш I
+map Щ O
+map З P
+map Х }
+map Ъ {
+map Ф A
+map Ы S
+map В D
+map А F
+map П G
+map Р H
+map О J
+map Л K
+map Д L
+map Ж :
+map Э "
+map Я Z
+map Ч X
+map С C
+map М V
+map И B
+map Т N
+map Ь M
+map Б <
+map Ю >
+map Ё ~
