@@ -14,7 +14,8 @@ Bundle 'gmarik/vundle'
 "
 " original repos on github
 Bundle 'tpope/vim-fugitive'
-Bundle 'kana/vim-submode'
+"Bundle 'kana/vim-submode'
+Bundle 'tpope/vim-surround'
 "_Bundle 'Lokaltog/vim-easymotion'
 " vim-scripts repos
 Bundle 'FuzzyFinder'
@@ -24,7 +25,7 @@ Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'Conque-Shell'
-Bundle 'taglist.vim'
+" Bundle 'taglist.vim'
 Bundle 'compview'
 " ...
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
@@ -59,7 +60,9 @@ set shiftwidth=4
 set autoindent
 set scrolloff=3
 syntax on
-color torte
+"color torte
+"color zenburn
+color wombat256
 set pastetoggle=<F2>
 set showtabline=2
 set guioptions=em
@@ -67,6 +70,8 @@ set guioptions=em
 set autoread
 set mouse=a
 set wildignore=*.pyc
+
+set path=.,,**
 
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
@@ -83,6 +88,7 @@ imap <C-h> <C-Left>
 
 nmap gr gT
 
+nmap <C-s> :%s/\<<c-r>=expand("<cword>")<cr>\>//g<left><left>
 
 nnoremap z @
 nnoremap zz @@
@@ -95,8 +101,7 @@ map <C-h> <C-W><Left>
 map <C-k> <C-W><Up>
 map <C-j> <C-W><Down>
 
-map <C-S> <Esc>:w<CR>
-nmap <leader>s <Esc>:w<CR>
+nmap <leader>s <Esc>:source %<CR>
 nmap <leader>w <Esc>:w<CR>
 
 nmap <C-f> :set hlsearch<CR>*#
@@ -211,10 +216,156 @@ set complete+=k
 set complete+=b
 set complete+=t
 
-let g:submode_timeout=0
-let g:submode_timeoutlen=60000
-"call submode#enter_with('fastdel', 'n', '', 'df', 'dd')
-"call submode#leave_with('fastdel', 'n', '', '<Esc>')
-"call submode#map('fastdel', 'n', '', 'f', 'dd')
-"call submode#map('fastdel', 'n', '', 'd', 'dd')
+" переключение раскладки по Ctrl-6
+set keymap=russian-jcukenwin
+set iminsert=0
+set imsearch=0
+highlight lCursor guifg=NONE guibg=Cyan
 
+" питоновские фишки
+function! PyTest(num)
+python << EOF
+import vim
+i = 0
+num = vim.eval("a:num")
+num = int(num)
+l0 = vim.current.buffer.mark('<')[0]-1
+l1 = vim.current.buffer.mark('>')[0]-1
+for i in xrange(l0, l1+1):
+    vim.current.buffer[i] = vim.current.buffer[i].replace('\\n', str(num))
+    num += 1
+EOF
+endfunction
+
+" мега-функция: ==============================================================
+" берет содержимое текущего буфера,
+" оборачивает во вспомогательный питоновский код
+" и делает доступным по \p
+function! Pythonize()
+python << EOF
+import vim
+import tempfile
+import os
+
+tmpfn = os.path.join(tempfile.gettempdir(), 'vimpy1.py')
+with open(tmpfn, 'w') as f:
+    print >>f, """
+function! PyTemp1(...)
+python << EOF
+import vim
+args = []
+
+for i in xrange(0, int(vim.eval('a:0'))):
+    args.append(vim.eval('a:%d' % (i+1)))
+
+class LinesIter(object):
+    def __init__(self, lines):
+        self.lines = lines
+        self.i = lines.l0
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        if self.i > lines.l1:
+            raise StopIteration
+        self.i += 1
+        return self.i-1, self.lines[self.i-1]
+
+class Lines(object):
+    def __init__(self):
+        self.l0 = vim.current.buffer.mark('<')[0]-1
+        self.l1 = vim.current.buffer.mark('>')[0]-1
+
+    def __iter__(self):
+        return LinesIter(self)
+
+    def __setitem__(self, i, val):
+        vim.current.buffer[i] = val
+    def __getitem__(self, i):
+        return vim.current.buffer[i]
+
+lines = Lines()"""
+    for line in vim.current.buffer[:]:
+        print >>f, line
+
+    print >>f, """EOF""" + """
+endfunction
+"""
+vim.command(":source " + tmpfn)
+vim.command(r":nmap \p :call PyTemp1()<CR>")
+vim.command(r":nmap \P :call PyTemp1()<left>")
+vim.command(":vmap \\p :\b\b\b\b\bcall PyTemp1()<CR>")
+vim.command(":vmap \\P :\b\b\b\b\bcall PyTemp1()<Left>")
+EOF
+endfunction
+
+nmap <leader>y :call Pythonize()<CR>
+" конец питоновских фишек ==================================================
+
+" Key mapping for Russian QWERTY keyboard in UTF-8
+"map й q
+"map ц w
+"map у e
+"map к r
+"map е t
+"map н y
+"map г u
+"map ш i
+"map щ o
+"map з p
+"map х [
+"map ъ ]
+"map ф a
+"map ы s
+"map в d
+"map а f
+"map п g
+"map р h
+"map о j
+"map л k
+"map д l
+"map ж ;
+"map э '
+"map я z
+"map ч x
+"map с c
+"map м v
+"map и b
+"map т n
+"map ь m
+"map б ,
+"map ю .
+"map Й Q
+"map Ц W
+"map У E
+"map К R
+"map Е T
+"map Н Y
+"map Г U
+"map Ш I
+"map Щ O
+"map З P
+"map Х }
+"map Ъ {
+"map Ф A
+"map Ы S
+"map В D
+"map А F
+"map П G
+"map Р H
+"map О J
+"map Л K
+"map Д L
+"map Ж :
+"map Э "
+"map Я Z
+"map Ч X
+"map С C
+"map М V
+"map И B
+"map Т N
+"map Ь M
+"map Б <
+"map Ю >
+"map Ё ~
