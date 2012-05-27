@@ -16,6 +16,7 @@ Bundle 'gmarik/vundle'
 Bundle 'tpope/vim-fugitive'
 "Bundle 'kana/vim-submode'
 Bundle 'tpope/vim-surround'
+"Bundle 'msanders/snipmate.vim'
 "_Bundle 'Lokaltog/vim-easymotion'
 " vim-scripts repos
 Bundle 'FuzzyFinder'
@@ -426,5 +427,11 @@ function! InsertLatex(type, ...)
     silent exe "normal `ul"
     silent exe "startinsert"
 endfunction
+
+" snippets
+"ino <c-j> <c-r>=TriggerSnippet()<cr>
+"snor <c-j> <esc>i<right><c-r>=TriggerSnippet()<cr>
+
+
 
 
