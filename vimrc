@@ -20,6 +20,7 @@ Bundle 'tpope/vim-surround'
 " vim-scripts repos
 Bundle 'FuzzyFinder'
 Bundle 'L9'
+Bundle 'mayansmoke'
 " non github repos
 Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
@@ -63,7 +64,8 @@ set scrolloff=3
 syntax on
 "color torte
 "color zenburn
-color wombat256
+" color wombat256
+color mayansmoke
 " режим вставки из буфера ОС, не портящий отступы
 set pastetoggle=<F2>
 
@@ -124,7 +126,7 @@ nmap <leader>w <Esc>:w<CR>
 nmap <C-f> :set hlsearch<CR>*#
 
 " не надо зажимать Shift, чтобы перейти в командную строку
-nmap ; :
+"nmap ; :
 
 " изменение отступов строк как в казуальных редакторах
 imap <S-Tab> <Esc><<i
