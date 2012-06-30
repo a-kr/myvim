@@ -15,7 +15,7 @@ Bundle 'gmarik/vundle'
 " original repos on github
 Bundle 'tpope/vim-fugitive'
 "Bundle 'kana/vim-submode'
-Bundle 'tpope/vim-surround'
+"Bundle 'tpope/vim-surround'
 "Bundle 'msanders/snipmate.vim'
 "_Bundle 'Lokaltog/vim-easymotion'
 " vim-scripts repos
@@ -29,8 +29,22 @@ Bundle 'scrooloose/nerdcommenter'
 Bundle 'Conque-Shell'
 " Bundle 'taglist.vim'
 Bundle 'compview'
+"Bundle 'pylint.vim'
+"Bundle 'orenhe/pylint.vim'
+Bundle 'nvie/vim-flake8'
 " ...
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
+
+set makeprg=pylint\ --reports=n\ --output-format=parseable\ %:p
+set errorformat=%f:%l:\ %m
+
+" для flake8
+let g:flake8_ignore="E501,E261,E201"
+" E501 line too long
+" E261 two spaces before inline comment
+" E201 extraneous whitespace around [({
+" переход к следующему косяку в quickfix
+map <C-n> <C-j>j<CR>
 
 " \f - поиск с выводом списка вариантов, с перемещением по нему
 map <leader>f <Plug>CompView
