@@ -39,10 +39,11 @@ set makeprg=pylint\ --reports=n\ --output-format=parseable\ %:p
 set errorformat=%f:%l:\ %m
 
 " для flake8
-let g:flake8_ignore="E501,E261,E201"
+let g:flake8_ignore="E501,E1123,E124,E126,E127,E128"
+let g:flake8_cmd="flake8"
 " E501 line too long
 " E261 two spaces before inline comment
-" E201 extraneous whitespace around [({
+" E201, E202 extraneous whitespace around [({
 " переход к следующему косяку в quickfix
 map <C-n> <C-j>j<CR>
 
@@ -79,8 +80,8 @@ set scrolloff=3
 syntax on
 "color torte
 "color zenburn
-" color wombat256
-color mayansmoke
+color wombat256
+"color mayansmoke
 " режим вставки из буфера ОС, не портящий отступы
 set pastetoggle=<F2>
 

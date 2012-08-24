@@ -265,6 +265,7 @@ call <SID>X("WarningMsg",	"ff0000",	"",			"")
 			"DiffChange
 			"DiffDelete
 			"DiffText
+hi TabLine guifg=Black
 
 " syntax highlighting
 call <SID>X("Number",		"e5786d",	"",			"none")
