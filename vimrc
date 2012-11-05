@@ -22,16 +22,18 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'FuzzyFinder'
 Bundle 'L9'
 Bundle 'mayansmoke'
+Bundle 'altercation/vim-colors-solarized'
 " non github repos
 Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
 Bundle 'scrooloose/nerdcommenter'
-Bundle 'Conque-Shell'
+"Bundle 'Conque-Shell'
 " Bundle 'taglist.vim'
 Bundle 'compview'
 "Bundle 'pylint.vim'
 "Bundle 'orenhe/pylint.vim'
 Bundle 'nvie/vim-flake8'
+Bundle 'anzaika/go.vim'
 " ...
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
 
@@ -80,8 +82,11 @@ set scrolloff=3
 syntax on
 "color torte
 "color zenburn
-color wombat256
+"color wombat256
 "color mayansmoke
+set background=dark
+let g:solarized_termcolors=16
+color solarized
 " режим вставки из буфера ОС, не портящий отступы
 set pastetoggle=<F2>
 
@@ -120,7 +125,7 @@ imap <C-h> <C-Left>
 nmap gr gT
 
 " создаем шаблон для замены из слова под курсором
-nmap <C-s> :%s/\<<c-r>=expand("<cword>")<cr>\>//g<left><left>
+nmap <C-m> :%s/\<<C-r>=expand("<cword>")<cr>\>//g<left><left>
 
 " более удобная кнопка запуска макросов, раскорячиваться для Shitf-2 ужасно
 " (убивает какую-то не пригодившуюся мне функциональность кнопки z)
@@ -449,4 +454,4 @@ endfunction
 
 
 
-
+map <leader>CC :colorscheme wombat256<CR>

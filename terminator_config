@@ -1,0 +1,82 @@
+[global_config]
+  handle_size = 1
+  enabled_plugins = ActivityWatch, TerminalShot, StylesForTerminal, APTURLHandler, LaunchpadCodeURLHandler, LaunchpadBugURLHandler
+  title_inactive_fg_color = "#cacaca"
+  borderless = True
+  title_transmit_bg_color = "#3e0001"
+  title_inactive_bg_color = "#0b0023"
+[keybindings]
+  group_tab = None
+  resize_left = <Control><Super>Left
+  reset_clear = None
+  go_right = <Super>l
+  new_tab = None
+  resize_right = <Control><Super>Right
+  resize_down = <Control><Super>Down
+  toggle_zoom = <Super>m
+  scaled_zoom = <Super>z
+  zoom_in = <Super>equal
+  group_all = None
+  move_tab_right = None
+  prev_tab = None
+  split_vert = <Control><Super>Return
+  ungroup_all = None
+  ungroup_tab = None
+  cycle_next = <Super>Tab
+  zoom_out = <Super>minus
+  go_prev = None
+  close_term = <Super>c
+  new_terminator = None
+  go_next = None
+  go_left = <Super>h
+  hide_window = None
+  reset = None
+  search = None
+  go_up = <Super>k
+  resize_up = <Control><Super>Up
+  next_tab = None
+  split_horiz = <Super>Return
+  zoom_normal = <Super>0
+  go_down = <Super>j
+  new_window = None
+  move_tab_left = None
+  toggle_scrollbar = None
+[profiles]
+  [[default]]
+    scrollbar_position = hidden
+    use_system_font = False
+    font = Ubuntu Mono 10
+    background_darkness = 0.8
+    background_image = /home/alexey/icloud-background.jpg
+    scroll_background = False
+    copy_on_selection = True
+    background_color = "#110707"
+  [[solarized-light]]
+    scrollbar_position = hidden
+    palette = "#eee8d5:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#073642:#fdf6e3:#cb4b16:#93a1a1:#839496:#657b83:#6c71c4:#586e75:#002b36"
+    names   = "base2  : red   : green :yellow :blue   : magen :cyan   : base02:base3  :orange :base1  :base0  :base00  :violet :base01 : base03 "
+    font = Ubuntu Mono 10
+    use_system_font = False
+    copy_on_selection = True
+    cursor_color = "#073642"
+    foreground_color = "#657b83"
+    background_color = "#fdf6e3"
+  [[solarized-dark]]
+    scrollbar_position = hidden
+    palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#002b36:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
+    names   = "base02 : red   : green :yellow :blue   : magen :cyan   : base2 :base03 :orange :base01 :base00 :base0  :violet :base1  : base3 "
+    font = Ubuntu Mono 10
+    use_system_font = False
+    copy_on_selection = True
+    cursor_color = "#eee8d5"
+    foreground_color = "#839496"
+    background_color = "#002b36"
+[layouts]
+  [[default]]
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+    [[[window0]]]
+      type = Window
+      parent = ""
+[plugins]
