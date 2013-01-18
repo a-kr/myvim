@@ -1,7 +1,7 @@
 set nocompatible
 
 " Vundle =======================================================================
-filetype off                   " required!
+ off                   " required!
 
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
@@ -14,12 +14,14 @@ Bundle 'gmarik/vundle'
 "
 " original repos on github
 Bundle 'tpope/vim-fugitive'
+Bundle 'altercation/vim-colors-solarized'
 "Bundle 'kana/vim-submode'
 "Bundle 'tpope/vim-surround'
+"Bundle 'klen/python-mode'
 "Bundle 'msanders/snipmate.vim'
 "_Bundle 'Lokaltog/vim-easymotion'
 " vim-scripts repos
-Bundle 'FuzzyFinder'
+"Bundle 'FuzzyFinder'
 Bundle 'L9'
 Bundle 'mayansmoke'
 Bundle 'altercation/vim-colors-solarized'
@@ -27,6 +29,7 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
 Bundle 'scrooloose/nerdcommenter'
+Bundle 'nvie/vim-flake8'
 "Bundle 'Conque-Shell'
 " Bundle 'taglist.vim'
 Bundle 'compview'
@@ -35,7 +38,17 @@ Bundle 'compview'
 Bundle 'nvie/vim-flake8'
 Bundle 'anzaika/go.vim'
 " ...
+
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
+let g:flake8_ignore="E501,E123,E124,E126,E127,E128"
+" 501: line too long
+" 261: two spaces before inline comment
+" 201: extraneous whitespace around ([{,;:
+" 202: same
+" 251: whitespace around named parameter equals
+
+" переход к следующему косяку в quickfix
+map <C-n> <C-j>j<CR>
 
 set makeprg=pylint\ --reports=n\ --output-format=parseable\ %:p
 set errorformat=%f:%l:\ %m
@@ -52,7 +65,7 @@ map <C-n> <C-j>j<CR>
 " \f - поиск с выводом списка вариантов, с перемещением по нему
 map <leader>f <Plug>CompView
 
-filetype plugin indent on     " required! 
+ plugin indent on     " required! 
 "
 " Brief help
 " :BundleList          - list configured bundles
@@ -72,6 +85,9 @@ set laststatus=2
 " строка ярлычков вкладок всегда видна:
 set showtabline=2
 
+set guifont="Ubuntu Mono 10"
+set guioptions=*
+
 set expandtab
 set tabstop=4
 set softtabstop=4
@@ -82,13 +98,16 @@ set scrolloff=3
 syntax on
 "color torte
 "color zenburn
-"color wombat256
 "color mayansmoke
 set background=dark
 let g:solarized_termcolors=16
-color solarized
+"color solarized
+color wombat256
 " режим вставки из буфера ОС, не портящий отступы
 set pastetoggle=<F2>
+
+"" highlight trailing spaces
+au BufNewFile,BufRead * let b:mtrailingws=matchadd('ErrorMsg', '\s\+$', -1)
 
 " что-то касающееся элементов управления GVim
 set guioptions=em
@@ -102,7 +121,7 @@ set wildignore=*.pyc,*.aux
 " командой find можно искать и открывать файл в подкаталогах
 set path=.,,**
 
-autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd  python set omnifunc=pythoncomplete#Complete
 
 " редактирование и перезагрузка vimrc
 nmap <leader>ve :tabnew ~/.vimrc<CR>
@@ -184,21 +203,21 @@ set incsearch
 
 " дифф с версией файла на диске
 function! s:DiffWithSaved()
-  let filetype=&ft
+  let =&ft
   diffthis
   vnew | r # | normal! 1Gdd
   diffthis
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . 
 endfunction
 com! Diff call s:DiffWithSaved()     
 nmap <leader>df :Diff<CR>
 
 " дифф с версией в Git
 function! s:DiffWithGITCheckedOut()
-  let filetype=&ft
+  let =&ft
   diffthis
   vnew | exe "%!git diff " . expand("#:p:h") . "| patch -p 1 -Rs -o /dev/stdout"
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . 
   diffthis
 endfunction
 com! Diffgit call s:DiffWithGITCheckedOut()
