@@ -1,7 +1,7 @@
 set nocompatible
 
 " Vundle =======================================================================
- off                   " required!
+filetype off                   " required!
 
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
@@ -65,7 +65,7 @@ map <C-n> <C-j>j<CR>
 " \f - поиск с выводом списка вариантов, с перемещением по нему
 map <leader>f <Plug>CompView
 
- plugin indent on     " required! 
+filetype plugin indent on     " required! 
 "
 " Brief help
 " :BundleList          - list configured bundles
@@ -121,7 +121,7 @@ set wildignore=*.pyc,*.aux
 " командой find можно искать и открывать файл в подкаталогах
 set path=.,,**
 
-autocmd  python set omnifunc=pythoncomplete#Complete
+autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 " редактирование и перезагрузка vimrc
 nmap <leader>ve :tabnew ~/.vimrc<CR>
@@ -201,26 +201,6 @@ set smartcase
 " поиск по мере ввода
 set incsearch
 
-" дифф с версией файла на диске
-function! s:DiffWithSaved()
-  let =&ft
-  diffthis
-  vnew | r # | normal! 1Gdd
-  diffthis
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . 
-endfunction
-com! Diff call s:DiffWithSaved()     
-nmap <leader>df :Diff<CR>
-
-" дифф с версией в Git
-function! s:DiffWithGITCheckedOut()
-  let =&ft
-  diffthis
-  vnew | exe "%!git diff " . expand("#:p:h") . "| patch -p 1 -Rs -o /dev/stdout"
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . 
-  diffthis
-endfunction
-com! Diffgit call s:DiffWithGITCheckedOut()
 nmap <leader>gd :Gdiff<CR><C-h>
 nmap <leader>gs :Gstatus<CR>
 nmap <leader>dd <Esc>:diffoff<CR>:q<CR>
