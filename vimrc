@@ -40,12 +40,6 @@ Bundle 'anzaika/go.vim'
 " ...
 
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
-let g:flake8_ignore="E501,E123,E124,E126,E127,E128"
-" 501: line too long
-" 261: two spaces before inline comment
-" 201: extraneous whitespace around ([{,;:
-" 202: same
-" 251: whitespace around named parameter equals
 
 " переход к следующему косяку в quickfix
 map <C-n> <C-j>j<CR>
@@ -54,18 +48,20 @@ set makeprg=pylint\ --reports=n\ --output-format=parseable\ %:p
 set errorformat=%f:%l:\ %m
 
 " для flake8
-let g:flake8_ignore="E501,E1123,E124,E126,E127,E128"
+let g:flake8_ignore="E501,E123,E124,E126,E127,E128"
 let g:flake8_cmd="flake8"
-" E501 line too long
-" E261 two spaces before inline comment
-" E201, E202 extraneous whitespace around [({
+" 201: extraneous whitespace around ([{,;:
+" 202: same
+" 251: whitespace around named parameter equals
+" 261: two spaces before inline comment
+" 501: line too long
 " переход к следующему косяку в quickfix
 map <C-n> <C-j>j<CR>
 
 " \f - поиск с выводом списка вариантов, с перемещением по нему
 map <leader>f <Plug>CompView
 
-filetype plugin indent on     " required! 
+filetype plugin indent on     " required!
 "
 " Brief help
 " :BundleList          - list configured bundles
@@ -144,7 +140,7 @@ imap <C-h> <C-Left>
 nmap gr gT
 
 " создаем шаблон для замены из слова под курсором
-nmap <C-m> :%s/\<<C-r>=expand("<cword>")<cr>\>//g<left><left>
+"nmap <C-m> :%s/\<<C-r>=expand("<cword>")<cr>\>//g<left><left>
 
 " более удобная кнопка запуска макросов, раскорячиваться для Shitf-2 ужасно
 " (убивает какую-то не пригодившуюся мне функциональность кнопки z)
