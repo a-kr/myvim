@@ -35,8 +35,9 @@ Bundle 'nvie/vim-flake8'
 Bundle 'compview'
 "Bundle 'pylint.vim'
 "Bundle 'orenhe/pylint.vim'
-Bundle 'nvie/vim-flake8'
+Bundle 'mileszs/ack.vim'
 Bundle 'anzaika/go.vim'
+Bundle 'klen/rope-vim'
 " ...
 
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
@@ -74,6 +75,7 @@ filetype plugin indent on     " required!
 set encoding=utf-8
 set number
 set t_Co=256
+set term=screen-256color
 let python_highlight_all = 1
 set statusline=%<%f\ [%Y%R%W]%1*%{(&modified)?'\ +\ ':''}%*\ encoding\:\ %{&fileencoding}%=%c%V,%l\ %P\ [%n]
 " статус-бар всегда виден:
@@ -109,9 +111,9 @@ au BufNewFile,BufRead * let b:mtrailingws=matchadd('ErrorMsg', '\s\+$', -1)
 set guioptions=em
 
 " автообновление измененных на диске файлов
-set autoread
-" редактор реагирует на мышь
-set mouse=a
+"set autoread
+" редактор не реагирует на мышь
+set mouse=
 set wildignore=*.pyc,*.aux
 
 " командой find можно искать и открывать файл в подкаталогах
@@ -224,23 +226,8 @@ function! AutoHighlightToggle()
     endif
 endfunction
 
-" кнопка для переключения мышиного режима
-" (два состояния:
-"    - в одном включены номера строк, и Vim понимает мышиное выделение,
-"      но не дает копировать текст в буфер ОС через выделение эмулятора
-"      терминала,
-"    - в другом Vim не обрабатывает мышь, и можно копировать через эмулятор
-"      терминала (при этом номера строк отключаются и не мешаются)
 function! MouseAndNumbersToggle()
-    if &mouse == ""
-        let &mouse = "a"
-        set number
-        echo "mouse enabled"
-    else
-        let &mouse = ""
-        set nonumber
-        echo "mouse disabled"
-    endif
+    set number!
 endfunction
 
 nnoremap <F12> :call MouseAndNumbersToggle()<CR>
@@ -450,3 +437,52 @@ endfunction
 
 
 map <leader>CC :colorscheme wombat256<CR>
+
+
+" Ivi code commenter
+let g:ivicc_file = "/tmp/ivicc.txt"
+let g:ivicc_strip_path = "/home/alexey/da/"
+
+function! IviCc() range
+    let line_begin = line("'<")
+    let line_end = line("'>")
+    let line_cur = line_begin
+    let path = substitute(expand("%:p"), g:ivicc_strip_path, "", "")
+    let path = substitute(path, "^.*\.git//[^/]*/", "", "")
+    let ready = ["'''" . path . "'''", "{{{"]
+    for bufline in getline(line_begin, line_end)
+        let ready = add(ready, printf("%4d  %s", line_cur, bufline))
+        let line_cur = line_cur + 1
+    endfor
+    let ready = add(ready, "}}}")
+    new IVICC
+    resize 16
+    setlocal noswapfile
+    setlocal buftype=acwrite
+    call append("^", ready)
+    setlocal nomodified
+    function! s:AppendCc()
+        let ccprev = []
+        if filereadable(g:ivicc_file)
+            let ccprev = readfile(g:ivicc_file)
+        endif
+        let ready = ccprev + getline(0, "$") + [""]
+        call writefile(ready, g:ivicc_file)
+        let @* = join(ready, "\n")
+        autocmd! BufWriteCmd IVICC
+        echo "Code commented:" len(ready) "lines"
+    endfunction
+    autocmd BufWriteCmd IVICC call s:AppendCc()
+endfunction
+
+vnoremap <silent><Leader>xx :call IviCc()<CR>
+
+
+com GOIndent :set tabstop=4| set shiftwidth=4| set noexpandtab
+com PyIndent :set tabstop=4| set shiftwidth=4| set expandtab
+autocmd BufNewFile *.go GOIndent
+autocmd BufRead *.go GOIndent
+
+autocmd BufNewFile *.py PyIndent
+autocmd BufRead *.py PyIndent
+
