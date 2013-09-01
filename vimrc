@@ -14,12 +14,14 @@ Bundle 'gmarik/vundle'
 "
 " original repos on github
 Bundle 'tpope/vim-fugitive'
+Bundle 'altercation/vim-colors-solarized'
 "Bundle 'kana/vim-submode'
 "Bundle 'tpope/vim-surround'
+"Bundle 'klen/python-mode'
 "Bundle 'msanders/snipmate.vim'
 "_Bundle 'Lokaltog/vim-easymotion'
 " vim-scripts repos
-Bundle 'FuzzyFinder'
+"Bundle 'FuzzyFinder'
 Bundle 'L9'
 Bundle 'mayansmoke'
 Bundle 'altercation/vim-colors-solarized'
@@ -27,34 +29,41 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
 Bundle 'scrooloose/nerdcommenter'
+Bundle 'nvie/vim-flake8'
 "Bundle 'Conque-Shell'
 " Bundle 'taglist.vim'
 Bundle 'compview'
 "Bundle 'pylint.vim'
 "Bundle 'orenhe/pylint.vim'
-Bundle 'nvie/vim-flake8'
+Bundle 'mileszs/ack.vim'
 Bundle 'anzaika/go.vim'
 Bundle 'mileszs/ack.vim'
+Bundle 'klen/rope-vim'
 " ...
+
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
+
+" переход к следующему косяку в quickfix
+map <C-n> <C-j>j<CR>
 
 set makeprg=pylint\ --reports=n\ --output-format=parseable\ %:p
 set errorformat=%f:%l:\ %m
 
 " для flake8
-let g:flake8_ignore="E501,E1123,E124,E126,E127,E128"
+let g:flake8_ignore="E501,E123,E124,E126,E127,E128"
 let g:flake8_cmd="flake8"
-" E501 line too long
-" E261 two spaces before inline comment
-" E201, E202 extraneous whitespace around [({
+" 201: extraneous whitespace around ([{,;:
+" 202: same
+" 251: whitespace around named parameter equals
+" 261: two spaces before inline comment
+" 501: line too long
 " переход к следующему косяку в quickfix
 map <C-n> <C-j>j<CR>
 
 " \f - поиск с выводом списка вариантов, с перемещением по нему
 map <leader>f <Plug>CompView
 
-
-filetype plugin indent on     " required! 
+filetype plugin indent on     " required!
 "
 " Brief help
 " :BundleList          - list configured bundles
@@ -67,12 +76,16 @@ filetype plugin indent on     " required!
 set encoding=utf-8
 set number
 set t_Co=256
+set term=screen-256color
 let python_highlight_all = 1
 set statusline=%<%f\ [%Y%R%W]%1*%{(&modified)?'\ +\ ':''}%*\ encoding\:\ %{&fileencoding}%=%c%V,%l\ %P\ [%n]
 " статус-бар всегда виден:
 set laststatus=2
 " строка ярлычков вкладок всегда видна:
 set showtabline=2
+
+set guifont="Ubuntu Mono 10"
+set guioptions=*
 
 set expandtab
 set tabstop=4
@@ -92,11 +105,14 @@ let g:solarized_termcolors=16
 " режим вставки из буфера ОС, не портящий отступы
 set pastetoggle=<F2>
 
+"" highlight trailing spaces
+au BufNewFile,BufRead * let b:mtrailingws=matchadd('ErrorMsg', '\s\+$', -1)
+
 " что-то касающееся элементов управления GVim
 set guioptions=em
 
 " автообновление измененных на диске файлов
-set autoread
+"set autoread
 " редактор не реагирует на мышь
 set mouse=
 set wildignore=*.pyc,*.aux,*.o
@@ -186,26 +202,6 @@ set smartcase
 " поиск по мере ввода
 set incsearch
 
-" дифф с версией файла на диске
-function! s:DiffWithSaved()
-  let filetype=&ft
-  diffthis
-  vnew | r # | normal! 1Gdd
-  diffthis
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
-endfunction
-com! Diff call s:DiffWithSaved()     
-nmap <leader>df :Diff<CR>
-
-" дифф с версией в Git
-function! s:DiffWithGITCheckedOut()
-  let filetype=&ft
-  diffthis
-  vnew | exe "%!git diff " . expand("#:p:h") . "| patch -p 1 -Rs -o /dev/stdout"
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
-  diffthis
-endfunction
-com! Diffgit call s:DiffWithGITCheckedOut()
 nmap <leader>gd :Gdiff<CR><C-h>
 nmap <leader>gs :Gstatus<CR>
 nmap <leader>dd <Esc>:diffoff<CR>:q<CR>
@@ -233,23 +229,8 @@ function! AutoHighlightToggle()
     endif
 endfunction
 
-" кнопка для переключения мышиного режима
-" (два состояния:
-"    - в одном включены номера строк, и Vim понимает мышиное выделение,
-"      но не дает копировать текст в буфер ОС через выделение эмулятора
-"      терминала,
-"    - в другом Vim не обрабатывает мышь, и можно копировать через эмулятор
-"      терминала (при этом номера строк отключаются и не мешаются)
 function! MouseAndNumbersToggle()
-    if &mouse == ""
-        let &mouse = "a"
-        set number
-        echo "mouse enabled"
-    else
-        let &mouse = ""
-        set nonumber
-        echo "mouse disabled"
-    endif
+    set number!
 endfunction
 
 nnoremap <F12> :call MouseAndNumbersToggle()<CR>
@@ -459,3 +440,52 @@ endfunction
 
 
 map <leader>CC :colorscheme wombat256<CR>
+
+
+" Ivi code commenter
+let g:ivicc_file = "/tmp/ivicc.txt"
+let g:ivicc_strip_path = "/home/alexey/da/"
+
+function! IviCc() range
+    let line_begin = line("'<")
+    let line_end = line("'>")
+    let line_cur = line_begin
+    let path = substitute(expand("%:p"), g:ivicc_strip_path, "", "")
+    let path = substitute(path, "^.*\.git//[^/]*/", "", "")
+    let ready = ["'''" . path . "'''", "{{{"]
+    for bufline in getline(line_begin, line_end)
+        let ready = add(ready, printf("%4d  %s", line_cur, bufline))
+        let line_cur = line_cur + 1
+    endfor
+    let ready = add(ready, "}}}")
+    new IVICC
+    resize 16
+    setlocal noswapfile
+    setlocal buftype=acwrite
+    call append("^", ready)
+    setlocal nomodified
+    function! s:AppendCc()
+        let ccprev = []
+        if filereadable(g:ivicc_file)
+            let ccprev = readfile(g:ivicc_file)
+        endif
+        let ready = ccprev + getline(0, "$") + [""]
+        call writefile(ready, g:ivicc_file)
+        let @* = join(ready, "\n")
+        autocmd! BufWriteCmd IVICC
+        echo "Code commented:" len(ready) "lines"
+    endfunction
+    autocmd BufWriteCmd IVICC call s:AppendCc()
+endfunction
+
+vnoremap <silent><Leader>xx :call IviCc()<CR>
+
+
+com GOIndent :set tabstop=4| set shiftwidth=4| set noexpandtab
+com PyIndent :set tabstop=4| set shiftwidth=4| set expandtab
+autocmd BufNewFile *.go GOIndent
+autocmd BufRead *.go GOIndent
+
+autocmd BufNewFile *.py PyIndent
+autocmd BufRead *.py PyIndent
+
