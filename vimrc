@@ -34,6 +34,7 @@ Bundle 'compview'
 "Bundle 'orenhe/pylint.vim'
 Bundle 'nvie/vim-flake8'
 Bundle 'anzaika/go.vim'
+Bundle 'mileszs/ack.vim'
 " ...
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
 
@@ -51,6 +52,7 @@ map <C-n> <C-j>j<CR>
 
 " \f - поиск с выводом списка вариантов, с перемещением по нему
 map <leader>f <Plug>CompView
+
 
 filetype plugin indent on     " required! 
 "
@@ -82,11 +84,11 @@ set scrolloff=3
 syntax on
 "color torte
 "color zenburn
-"color wombat256
+color wombat256
 "color mayansmoke
 set background=dark
 let g:solarized_termcolors=16
-color solarized
+"color solarized
 " режим вставки из буфера ОС, не портящий отступы
 set pastetoggle=<F2>
 
@@ -95,9 +97,9 @@ set guioptions=em
 
 " автообновление измененных на диске файлов
 set autoread
-" редактор реагирует на мышь
-set mouse=a
-set wildignore=*.pyc,*.aux
+" редактор не реагирует на мышь
+set mouse=
+set wildignore=*.pyc,*.aux,*.o
 
 " командой find можно искать и открывать файл в подкаталогах
 set path=.,,**
@@ -112,6 +114,7 @@ nmap <leader>vr :w<CR>:source ~/.vimrc<CR>
 " заодно повесим на это действие сохранение
 imap jk <Esc>:w<CR>
 
+
 " сокращения для открытия новой вкладки
 cnoreabbrev nt tabnew
 cnoreabbrev tn tabnew
@@ -125,12 +128,13 @@ imap <C-h> <C-Left>
 nmap gr gT
 
 " создаем шаблон для замены из слова под курсором
-nmap <C-m> :%s/\<<C-r>=expand("<cword>")<cr>\>//g<left><left>
+"nmap <C-m> :%s/\<<C-r>=expand("<cword>")<cr>\>//g<left><left>
 
 " более удобная кнопка запуска макросов, раскорячиваться для Shitf-2 ужасно
 " (убивает какую-то не пригодившуюся мне функциональность кнопки z)
 nnoremap z @
 nnoremap zz @@
+nnoremap <F4> @@
 
 " быстрая версия команд перемещения между сплитами
 map <C-l> <C-W><Right>
