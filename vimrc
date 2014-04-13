@@ -39,6 +39,7 @@ Bundle 'mileszs/ack.vim'
 Bundle 'anzaika/go.vim'
 Bundle 'mileszs/ack.vim'
 Bundle 'klen/rope-vim'
+Bundle 'nddrylliog/ooc.vim'
 " ...
 
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
@@ -164,7 +165,7 @@ nmap <leader>s <Esc>:source %<CR>
 nmap <leader>w <Esc>:w<CR>
 
 " подсвечивает все вхождения слова под курсором
-nmap <C-f> :set hlsearch<CR>*#
+nmap <C-f> :set hlsearch<CR>#*
 
 " не надо зажимать Shift, чтобы перейти в командную строку
 "nmap ; :
@@ -184,6 +185,8 @@ nmap <C-d> <Esc>yyp
 nmap <leader>q :q<CR>
 " открытие файлового браузера
 nmap <leader>n :NERDTreeToggle %:p:h<CR>
+
+let NERDTreeIgnore=['\.o$', '\~$', '\.cmi$', '\.cmo$', '\.cmx$']
 
 " переключение автопереносов строк
 nmap <F10> <Esc>:set wrap!<CR>
@@ -489,3 +492,14 @@ autocmd BufRead *.go GOIndent
 autocmd BufNewFile *.py PyIndent
 autocmd BufRead *.py PyIndent
 
+
+" ocaml-annot
+function! OCamlType()
+    let col  = col('.')
+    let line = line('.')
+    let file = expand("%:p:r")
+    echo system("annot -n -type ".line." ".col." ".file.".annot")
+endfunction
+map ,t :call OCamlType()<return>
+
+set cryptmethod=blowfish

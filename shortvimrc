@@ -35,7 +35,6 @@ set complete+=k
 set complete+=b
 set complete+=t
 nnoremap <leader>w :w<CR>
-color blue
 nnoremap <C-l> <C-W><right>
 nnoremap <C-h> <C-W><left>
 nnoremap <C-j> <C-W><down>
