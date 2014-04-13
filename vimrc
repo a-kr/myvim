@@ -37,6 +37,7 @@ Bundle 'compview'
 "Bundle 'orenhe/pylint.vim'
 Bundle 'mileszs/ack.vim'
 Bundle 'anzaika/go.vim'
+Bundle 'mileszs/ack.vim'
 Bundle 'klen/rope-vim'
 " ...
 
@@ -96,11 +97,11 @@ set scrolloff=3
 syntax on
 "color torte
 "color zenburn
+color wombat256
 "color mayansmoke
 set background=dark
 let g:solarized_termcolors=16
 "color solarized
-color wombat256
 " режим вставки из буфера ОС, не портящий отступы
 set pastetoggle=<F2>
 
@@ -114,7 +115,7 @@ set guioptions=em
 "set autoread
 " редактор не реагирует на мышь
 set mouse=
-set wildignore=*.pyc,*.aux
+set wildignore=*.pyc,*.aux,*.o
 
 " командой find можно искать и открывать файл в подкаталогах
 set path=.,,**
@@ -128,6 +129,7 @@ nmap <leader>vr :w<CR>:source ~/.vimrc<CR>
 " быстрый выход из режима вставки (не надо тянуться к Esc)
 " заодно повесим на это действие сохранение
 imap jk <Esc>:w<CR>
+
 
 " сокращения для открытия новой вкладки
 cnoreabbrev nt tabnew
@@ -148,6 +150,7 @@ nmap gr gT
 " (убивает какую-то не пригодившуюся мне функциональность кнопки z)
 nnoremap z @
 nnoremap zz @@
+nnoremap <F4> @@
 
 " быстрая версия команд перемещения между сплитами
 map <C-l> <C-W><Right>
