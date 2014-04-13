@@ -1,4 +1,5 @@
 imap jk <Esc>
+set background=dark
 cnoreabbrev nt tabnew
 nmap gr gT
 set laststatus=2
