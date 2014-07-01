@@ -3,11 +3,13 @@ set nocompatible
 " Vundle =======================================================================
 filetype off                   " required!
 
+let g:ackprg = "ag --nocolor --nogroup --column"
+
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 " let Vundle manage Vundle
-" required! 
+" required!
 Bundle 'gmarik/vundle'
 
 " My Bundles here:
@@ -36,9 +38,12 @@ Bundle 'compview'
 "Bundle 'pylint.vim'
 "Bundle 'orenhe/pylint.vim'
 Bundle 'mileszs/ack.vim'
-Bundle 'anzaika/go.vim'
+Bundle 'jnwhiteh/vim-golang'
+"Bundle 'fatih/vim-go'
 Bundle 'mileszs/ack.vim'
 Bundle 'klen/rope-vim'
+Bundle 'kien/ctrlp.vim'
+"Bundle 'Shougo/unite.vim'
 " ...
 
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
@@ -46,7 +51,7 @@ let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
 " переход к следующему косяку в quickfix
 map <C-n> <C-j>j<CR>
 
-set makeprg=pylint\ --reports=n\ --output-format=parseable\ %:p
+"set makeprg=pylint\ --reports=n\ --output-format=parseable\ %:p
 set errorformat=%f:%l:\ %m
 
 " для flake8
@@ -99,7 +104,6 @@ syntax on
 "color zenburn
 color wombat256
 "color mayansmoke
-set background=dark
 let g:solarized_termcolors=16
 "color solarized
 " режим вставки из буфера ОС, не портящий отступы
@@ -488,8 +492,29 @@ com PyIndent :set tabstop=4| set shiftwidth=4| set expandtab
 autocmd BufNewFile *.go GOIndent
 autocmd BufRead *.go GOIndent
 
+"autocmd FileType go autocmd BufWritePre <buffer> Fmt
+let g:gofmt_command = 'goimports'
+
 autocmd BufNewFile *.py PyIndent
 autocmd BufRead *.py PyIndent
 
+imap C-e if err != nil {<CR>return err<CR>}
 
 set cryptmethod=blowfish
+
+"options for vim-go
+let g:go_fmt_autosave = 0
+
+nmap C-P :CtrlPMixed<CR>
+nmap C-B :CtrlPBuffer<CR>
+let g:ctrlp_prompt_mappings = {
+    \ 'AcceptSelection("e")': ['<c-t>'],
+    \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
+    \ }
+"
+" Unite.vim
+""" let g:unite_source_rec_async_command = 'ack --nocolor --nogroup -g .'
+""" call unite#filters#matcher_default#use(['matcher_fuzzy'])
+""" call unite#filters#sorter_default#use(['sorter_rank'])
+""" nmap <silent> <C-p> :Unite -auto-resize file_rec/async<CR>:startinsert<CR>
+
