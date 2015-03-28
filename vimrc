@@ -41,9 +41,11 @@ Bundle 'mileszs/ack.vim'
 Bundle 'jnwhiteh/vim-golang'
 "Bundle 'fatih/vim-go'
 Bundle 'mileszs/ack.vim'
-Bundle 'klen/rope-vim'
+"Bundle 'klen/rope-vim'
 Bundle 'kien/ctrlp.vim'
+"Bundle 'Rykka/riv.vim'
 "Bundle 'Shougo/unite.vim'
+"Bundle 'FredKSchott/CoVim'
 " ...
 
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
@@ -511,6 +513,7 @@ let g:ctrlp_prompt_mappings = {
     \ 'AcceptSelection("e")': ['<c-t>'],
     \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
     \ }
+let g:ctrlp_custom_ignore = '.a$'
 "
 " Unite.vim
 """ let g:unite_source_rec_async_command = 'ack --nocolor --nogroup -g .'
@@ -518,3 +521,11 @@ let g:ctrlp_prompt_mappings = {
 """ call unite#filters#sorter_default#use(['sorter_rank'])
 """ nmap <silent> <C-p> :Unite -auto-resize file_rec/async<CR>:startinsert<CR>
 
+let g:lasttab = 1
+nmap <Leader>t :exe "tabn ".g:lasttab<CR>
+au TabLeave * let g:lasttab = tabpagenr()
+
+autocmd BufNewFile,BufRead *.rst.incl set filetype=rst
+autocmd BufNewFile,BufRead *.rst.tmpl set filetype=rst
+
+set noswapfile
