@@ -27,6 +27,7 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'L9'
 Bundle 'mayansmoke'
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'leafgarland/typescript-vim'
 " non github repos
 Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
@@ -47,6 +48,7 @@ Bundle 'kien/ctrlp.vim'
 "Bundle 'Shougo/unite.vim'
 "Bundle 'FredKSchott/CoVim'
 " ...
+Bundle 'jlanzarotta/bufexplorer'
 
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
 
@@ -110,6 +112,7 @@ let g:solarized_termcolors=16
 "color solarized
 " режим вставки из буфера ОС, не портящий отступы
 set pastetoggle=<F2>
+set pastetoggle=<F3>
 
 "" highlight trailing spaces
 au BufNewFile,BufRead * let b:mtrailingws=matchadd('ErrorMsg', '\s\+$', -1)
@@ -199,9 +202,9 @@ nmap <F10> <Esc>:set wrap!<CR>
 nmap <F11> <Esc>:set number!<CR>
 
 " открытие терминала
-nmap <leader>bt :ConqueTermTab bash<CR>
-nmap <leader>bs :ConqueTermSplit bash<CR>
-nmap <leader>bv :ConqueTermVSplit bash<CR>
+"nmap <leader>bt :ConqueTermTab bash<CR>
+"nmap <leader>bs :ConqueTermSplit bash<CR>
+"nmap <leader>bv :ConqueTermVSplit bash<CR>
 
 " поиск не учитывает регистр...
 set ignorecase
@@ -489,8 +492,8 @@ endfunction
 vnoremap <silent><Leader>xx :call IviCc()<CR>
 
 
-com GOIndent :set tabstop=4| set shiftwidth=4| set noexpandtab
-com PyIndent :set tabstop=4| set shiftwidth=4| set expandtab
+com! GOIndent :set tabstop=4| set shiftwidth=4| set noexpandtab
+com! PyIndent :set tabstop=4| set shiftwidth=4| set expandtab
 autocmd BufNewFile *.go GOIndent
 autocmd BufRead *.go GOIndent
 
@@ -513,7 +516,8 @@ let g:ctrlp_prompt_mappings = {
     \ 'AcceptSelection("e")': ['<c-t>'],
     \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
     \ }
-let g:ctrlp_custom_ignore = '.a$'
+let g:ctrlp_custom_ignore = '\.a$'
+let g:ctrlp_root_markers = ['Makefile']
 "
 " Unite.vim
 """ let g:unite_source_rec_async_command = 'ack --nocolor --nogroup -g .'
@@ -529,3 +533,16 @@ autocmd BufNewFile,BufRead *.rst.incl set filetype=rst
 autocmd BufNewFile,BufRead *.rst.tmpl set filetype=rst
 
 set noswapfile
+
+" To make vsplit put the new buffer on the right
+set splitright
+set splitbelow
+
+nnoremap K :CtrlPBuffer<CR>
+nnoremap H :call Fav('normal')<CR>
+nnoremap <Leader>S :source %<CR>
+
+nnoremap mm :call FavNextMark()<CR>
+nnoremap MM :call FavNextMarkDisplay()<CR>
+
+source ~/myvim/fav.vim
