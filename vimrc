@@ -16,7 +16,7 @@ Bundle 'gmarik/vundle'
 "
 " original repos on github
 Bundle 'tpope/vim-fugitive'
-Bundle 'altercation/vim-colors-solarized'
+"Bundle 'altercation/vim-colors-solarized'
 "Bundle 'kana/vim-submode'
 "Bundle 'tpope/vim-surround'
 "Bundle 'klen/python-mode'
@@ -25,11 +25,11 @@ Bundle 'altercation/vim-colors-solarized'
 " vim-scripts repos
 "Bundle 'FuzzyFinder'
 Bundle 'L9'
-Bundle 'mayansmoke'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'leafgarland/typescript-vim'
+"Bundle 'mayansmoke'
+"Bundle 'altercation/vim-colors-solarized'
+"Bundle 'leafgarland/typescript-vim'
 " non github repos
-Bundle 'git://git.wincent.com/command-t.git'
+"Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'nvie/vim-flake8'
@@ -48,7 +48,8 @@ Bundle 'kien/ctrlp.vim'
 "Bundle 'Shougo/unite.vim'
 "Bundle 'FredKSchott/CoVim'
 " ...
-Bundle 'jlanzarotta/bufexplorer'
+"Bundle 'jlanzarotta/bufexplorer'
+"Bundle 'gregsexton/gitv'
 
 let g:ConqueTerm_PyExe='c:\Python27-32\python.exe'
 
@@ -159,7 +160,6 @@ nmap gr gT
 " (убивает какую-то не пригодившуюся мне функциональность кнопки z)
 nnoremap z @
 nnoremap zz @@
-nnoremap <F4> @@
 
 " быстрая версия команд перемещения между сплитами
 map <C-l> <C-W><Right>
@@ -187,8 +187,6 @@ nmap <Tab> >>
 nnoremap 0 <S-$>
 nnoremap 9 <S-^>
 
-" дублирование строки
-nmap <C-d> <Esc>yyp
 " закрытие окна
 nmap <leader>q :q<CR>
 " открытие файлового браузера
@@ -546,3 +544,16 @@ nnoremap mm :call FavNextMark()<CR>
 nnoremap MM :call FavNextMarkDisplay()<CR>
 
 source ~/myvim/fav.vim
+
+
+
+nmap <LocalLeader>R :call ViewInRedmine()<CR>
+fun! ViewInRedmine()
+    let keyword = expand("<cword>")
+    let url = "http://redmine.ivi.ru/issues/" . keyword
+    call netrw#BrowseX(url, 0)
+endfun
+
+set breakindent
+set breakindentopt=shift:2,min:40,sbr
+set showbreak=>>

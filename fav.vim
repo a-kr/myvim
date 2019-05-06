@@ -17,9 +17,12 @@
 "   Shift-H, mm:  jump to next mark among all opened windows
 "   mm:           same, without opening mark explorer
 "
-"
-python << EOF
+" TODO: refactor; Ctrl-N Ctrl-n switch up-down any type of mark;
+"       MRU list of edited windows (InsertEnter event); backspace switching;
+"       integration with todo manager? notes editing?
+python3 << EOF
 import re
+import vim
 
 FAV_SETTINGS = {
     'more_context': False,
@@ -149,7 +152,7 @@ def go_to_next_user_mark():
 EOF
 
 function! Fav(favmode)
-python << EOF
+python3 << EOF
 import vim
 oldbuf = vim.current.buffer
 oldwin = vim.current.window
@@ -190,9 +193,9 @@ vim.command('nnoremap <buffer> <nowait> mm :call FavNextMarkDisplay()<CR>')
 vim.command('nnoremap <buffer> <nowait> d :call FavDeleteMark()<CR>')
 vim.command('nnoremap <buffer> <nowait> L :call FavFill("all", "L")<CR>')
 vim.command('nnoremap <buffer> <nowait> c :call FavSetting("more_context")<CR>')
-vim.command('nnoremap <buffer> <nowait> C :call FavSetting("more_context")<CR>')
+vim.command('nnoremap <buffer> <nowait> C :call FavCloseWindow()<CR>')
 vim.command('nnoremap <buffer> <nowait> \' :call FavSetting("only_user_marks")<CR>')
-for i in xrange(1, 10):
+for i in range(1, 10):
     vim.command('nnoremap <buffer> <nowait> %s /%s' % (i, i))
 
 if favmode == 'normal':
@@ -202,7 +205,7 @@ EOF
 endfunction
 
 function! FavFill(buffer_selector, line_kind)
-python << EOF
+python3 << EOF
 import vim
 
 buffer_selector = vim.eval('a:buffer_selector')
@@ -263,7 +266,7 @@ def scan_single_buf(buf, buf_curr_line):
         kind = ''
         if line_kind == 'L':
             do = True; kind = 'L'
-        if line0.startswith('type ') or line0.startswith('func') or line0.startswith('def ') or line0.startswith('class '):
+        if line0.startswith('type ') or line0.startswith('func') or line0.startswith('def ') or line0.startswith('class ') or line0.startswith('export ') or line0.startswith('public '):
             do = True; kind = 'C'
         if 'XXX' in line0 or 'TODO' in line0 or 'FIXME' in line0 or 'WTF' in line0:
             do = True; kind = 'T'
@@ -333,16 +336,19 @@ del newbuf[0]
 if line_kind == 'M':
     newbuf.append('')
     newbuf.append('# Press d to delete mark; press mm to switch to next mark.')
+elif line_kind == 'L':
+    newbuf.append('')
+    newbuf.append('# Press C to close selected window')
 
 
 vim.command('setlocal nomodifiable')
 set_syntax('', True)
-print "t/T (todos in single/all files); M (marks); mm (next mark); s/S (SQL queries); a/A (all items); L (list windows); c (context 1/3); ' (only user marks)"
+print("t/T (todos in single/all files); M (marks); mm (next mark); s/S (SQL queries); a/A (all items); L (list windows); c (context 1/3); ' (only user marks)")
 EOF
 endfunction
 
 function! FavGoto()
-python << EOF
+python3 << EOF
 import vim, re
 
 target_win, target_line, extra = get_selected_file_and_line()
@@ -353,13 +359,13 @@ if target_win:
     if target_line is not None:
         vim.current.window.cursor = (target_line, 0)
 
-print ''
+print('')
 
 EOF
 endfunction
 
 function! FavDeleteMark()
-python << EOF
+python3 << EOF
 target_win, target_line, extra = get_selected_file_and_line()
 if target_win and extra:
     current_buf = vim.current.buffer
@@ -371,10 +377,25 @@ if target_win and extra:
 EOF
 endfunction
 
+function! FavCloseWindow()
+python3 << EOF
+cur_line_no = vim.current.window.cursor[0]
+target_win, target_line, extra = get_selected_file_and_line()
+if target_win:
+    vim.command("q")
+    switch_to_window(target_win.buffer.name)
+    vim.command("q")
+    vim.command("call Fav('again')")
+    while cur_line_no > len(vim.current.buffer):
+        cur_line_no -= 1
+    vim.current.window.cursor = (cur_line_no, 0)
+EOF
+endfunction
+
 
 
 function! FavSetting(setting_name)
-python << EOF
+python3 << EOF
 setting_name = vim.eval('a:setting_name')
 if setting_name == 'more_context':
     FAV_SETTINGS['more_context'] = not FAV_SETTINGS['more_context']
@@ -386,13 +407,13 @@ EOF
 endfunction
 
 function! FavNextMark()
-python << EOF
+python3 << EOF
 go_to_next_user_mark()
 EOF
 endfunction
 
 function! FavNextMarkDisplay()
-python << EOF
+python3 << EOF
 FAV_SETTINGS['only_user_marks'] = True
 if not vim.current.buffer.name:
     vim.command("q")
